@@ -1,13 +1,13 @@
 <h1 align="center">
-   Template React, Vite, TypeScript e Material UI
+   Gerenciador Financeiro
 </h1>
 
 <br>
 
 ## 💻 Projeto
 
-[Template](https://github.com/lucasspeixoto/template_react_typescript_material) É um projeto
-de estruturação de projetos com React, TypeScript e material ui entre outras tecnologias.
+[Template](https://github.com/lucasspeixoto/template_react_typescript_material)  Projeto de controle financeiro para auxilio pessoal no controle de ganhos e despesas de minha família com minha esposa, Liana Fernandes.
+
 
 ## 🔖 Layout
 
