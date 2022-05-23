@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Login } from '@mui/icons-material';
+import HourglassTopTwoToneIcon from '@mui/icons-material/HourglassTopTwoTone';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -10,30 +11,34 @@ import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import AuthButton from 'components/elements/AuthButton';
+import AppButton from 'components/elements/AppButton';
 import Switch from 'components/elements/Switch';
 import Copyright from 'components/widgets/Copyright';
 import { useTheme } from 'core/hooks/useTheme';
 import React, { ChangeEvent, useState } from 'react';
 
 const SignIn: React.FC = () => {
+  const { theme, changeTheme } = useTheme();
+
+  //true (Na direita) Dark | false (Na esquerda) Light
+  const [checked, setChecked] = useState<boolean>(() => {
+    return theme == 'dark' ? true : false;
+  });
+
+  const [isLoadingButton, setIsLoadingButton] = useState(false);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    setIsLoadingButton(true);
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get('email'),
       password: data.get('password'),
     });
+    setTimeout(() => {
+      setIsLoadingButton(false);
+    }, 1500);
   };
-
-  const { theme, changeTheme } = useTheme();
-
-  /**
-   * checked = true (Na direita) Dark | false (Na esquerda) Light
-   */
-  const [checked, setChecked] = useState<boolean>(() => {
-    return theme == 'dark' ? true : false;
-  });
 
   const changeThemeHandle = (event: ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
@@ -98,11 +103,11 @@ const SignIn: React.FC = () => {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Lembrar"
               />
-              <AuthButton
+              <AppButton
                 type="submit"
-                disabled={false}
-                label="Entrar"
-                icon={<Login />}
+                disabled={isLoadingButton}
+                label={isLoadingButton ? 'Loading ...' : 'Entrar'}
+                icon={isLoadingButton ? <HourglassTopTwoToneIcon /> : <Login />}
               />
               <Grid container>
                 <Grid item xs>

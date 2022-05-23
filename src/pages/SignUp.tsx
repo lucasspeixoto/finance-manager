@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/no-autofocus */
+import HourglassTopTwoToneIcon from '@mui/icons-material/HourglassTopTwoTone';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import Avatar from '@mui/material/Avatar';
@@ -12,11 +13,11 @@ import Link from '@mui/material/Link';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import AuthButton from 'components/elements/AuthButton';
+import AppButton from 'components/elements/AppButton';
 import Switch from 'components/elements/Switch';
 import Copyright from 'components/widgets/Copyright';
 import { useTheme } from 'core/hooks/useTheme';
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 
 //import LoginBackground from './../assets/login-background.png';
 
@@ -41,13 +42,19 @@ const SignupContainer = styled(Container)<ContainerProps>(({ theme }) => ({
 }));
 
 const SignUp: React.FC = () => {
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const [isLoadingButton, setIsLoadingButton] = useState(false);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    setIsLoadingButton(true);
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get('email'),
       password: data.get('password'),
     });
+    setTimeout(() => {
+      setIsLoadingButton(false);
+    }, 1500);
   };
 
   const { theme, changeTheme } = useTheme();
@@ -125,12 +132,13 @@ const SignUp: React.FC = () => {
               />
             </Grid>
           </Grid>
-          <AuthButton
+          <AppButton
             type="submit"
-            disabled={false}
-            label="Cadastrar"
-            icon={<PersonAddAlt1Icon />}
+            disabled={isLoadingButton}
+            label={isLoadingButton ? 'Loading ...' : 'Cadastrar'}
+            icon={isLoadingButton ? <HourglassTopTwoToneIcon /> : <PersonAddAlt1Icon />}
           />
+
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href="/signin" variant="body2">

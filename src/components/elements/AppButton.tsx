@@ -10,7 +10,7 @@ type LoginButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   authProcessHandler?: () => void;
 };
 
-const LoginButton = styled(Button)(
+const StyledButton = styled(Button)(
   ({ theme }) => `
 		font-size: 15px;
 		background: ${theme.colors.primary.main};
@@ -22,7 +22,7 @@ const LoginButton = styled(Button)(
 `,
 );
 
-const AuthButton: React.FC<LoginButtonProps> = ({
+const AppButton: React.FC<LoginButtonProps> = ({
   type,
   label,
   icon,
@@ -30,7 +30,7 @@ const AuthButton: React.FC<LoginButtonProps> = ({
   authProcessHandler,
 }) => {
   return (
-    <LoginButton
+    <StyledButton
       disabled={disabled}
       type={type}
       fullWidth
@@ -40,8 +40,8 @@ const AuthButton: React.FC<LoginButtonProps> = ({
       onClick={authProcessHandler}
     >
       {label}
-    </LoginButton>
+    </StyledButton>
   );
 };
 
-export default AuthButton;
+export default AppButton;
