@@ -1,9 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import styled from '@emotion/styled';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import { IconButton, InputAdornment } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
+import Box, { BoxProps } from '@mui/material/Box';
 import Grid, { GridProps } from '@mui/material/Grid';
 import LinearProgress from '@mui/material/LinearProgress';
 import Link from '@mui/material/Link';
@@ -12,28 +14,13 @@ import Typography from '@mui/material/Typography';
 import AppButton from 'components/elements/AppButton';
 import Switch from 'components/elements/Switch';
 import Copyright from 'components/widgets/Copyright';
+import { loginSchema } from 'core/helpers/schemas/login-schema';
 import { useTheme } from 'core/hooks/useTheme';
 import { useToggle } from 'core/hooks/useToggle';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { TextField } from 'formik-mui';
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import * as Yup from 'yup';
-
-const schema = Yup.object()
-  .shape({
-    email: Yup.string()
-      .required('O E-mail é um campo obrigatório')
-      .trim()
-      .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, 'E-mail inválido!'),
-    password: Yup.string()
-      .required('A senha é um campo obrigatório')
-      .matches(
-        /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-        'A Senha deve conter ao menos 8 caracteres, um maiusculo, um número e um caracter especial',
-      ),
-  })
-  .required();
 
 interface LoginForm {
   email: string;
@@ -52,22 +39,35 @@ const BackgroundGrid = styled(Grid)<GridProps>(() => ({
   backgroundPosition: 'center',
 }));
 
+const SigninBox = styled(Box)<BoxProps>(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+}));
+
 const SignIn: React.FC = () => {
-  const { theme, changeTheme } = useTheme();
-
-  const [checked, setChecked] = useToggle(theme === 'dark' ? true : false);
-
+  //* Estados
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoadingButton, setIsLoadingButton] = useState(false);
 
+  //* Hooks
+  const { theme, changeTheme } = useTheme();
+  const [checked, setChecked] = useToggle(theme === 'dark' ? true : false);
+
+  //* Métodos
   const handleChangeTheme = () => {
     setChecked();
     theme == 'dark' ? changeTheme('light') : changeTheme('dark');
   };
 
-  const handleSubmitLoginForm = async (values: LoginForm) => {
+  const handleSubmitLoginForm = async (
+    values: LoginForm,
+    actions: FormikHelpers<LoginForm>,
+  ) => {
     setIsLoadingButton(true);
     setTimeout(() => {
       setIsLoadingButton(false);
+      actions.setSubmitting(false);
       alert(JSON.stringify(values, null, 2));
     }, 2500);
   };
@@ -81,15 +81,7 @@ const SignIn: React.FC = () => {
         <BackgroundGrid item xs={false} sm={4} md={8} />
         <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square>
           <Switch checked={checked} onChange={handleChangeTheme} />
-          <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
+          <SigninBox sx={{ my: 8, mx: 4 }}>
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
@@ -99,10 +91,10 @@ const SignIn: React.FC = () => {
             <Box sx={{ mt: 1 }}>
               <Formik
                 initialValues={initialValues}
-                validationSchema={schema}
+                validationSchema={loginSchema}
                 onSubmit={handleSubmitLoginForm}
               >
-                {({ submitForm }) => (
+                {({ submitForm, isValid, dirty }) => (
                   <Form>
                     <Field
                       component={TextField}
@@ -116,14 +108,26 @@ const SignIn: React.FC = () => {
                       component={TextField}
                       margin="normal"
                       fullWidth
-                      type="password"
+                      type={showPassword ? 'text' : 'password'}
                       label="Password"
                       name="password"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={() => setShowPassword((prev) => !prev)}
+                            >
+                              {showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
                     />
                     {isLoadingButton ? <LinearProgress /> : null}
                     <AppButton
                       type="submit"
-                      disabled={isLoadingButton}
+                      disabled={isLoadingButton || !isValid || !dirty}
                       onClick={submitForm}
                       label="Login"
                       icon={<PersonAddAlt1Icon />}
@@ -145,7 +149,7 @@ const SignIn: React.FC = () => {
               </Grid>
               <Copyright text="Seu Site" redirectUrl="https://mui.com" />
             </Box>
-          </Box>
+          </SigninBox>
         </Grid>
       </Grid>
     </React.Fragment>
