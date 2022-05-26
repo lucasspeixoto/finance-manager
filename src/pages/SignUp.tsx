@@ -17,7 +17,9 @@ import AppButton from 'components/elements/AppButton';
 import Switch from 'components/elements/Switch';
 import Copyright from 'components/widgets/Copyright';
 import { useTheme } from 'core/hooks/useTheme';
+import { useToggle } from 'core/hooks/useToggle';
 import React, { ChangeEvent, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 //import LoginBackground from './../assets/login-background.png';
 
@@ -59,21 +61,21 @@ const SignUp: React.FC = () => {
 
   const { theme, changeTheme } = useTheme();
 
-  /**
-   * checked = true (Na direita) Dark | false (Na esquerda) Light
-   */
-  const [checked, setChecked] = useState<boolean>(() => {
-    return theme == 'dark' ? true : false;
-  });
+  const [checked, setChecked] = useToggle(theme === 'dark' ? true : false);
 
-  const changeThemeHandle = (event: ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
+  // eslint-disable-next-line no-unused-vars
+  const handleChangeTheme = (event?: ChangeEvent<HTMLInputElement>) => {
+    //event.preventDefault();
+    setChecked();
     theme == 'dark' ? changeTheme('light') : changeTheme('dark');
   };
 
   return (
     <BackgroundContainer>
-      <Switch checked={checked} onChange={changeThemeHandle} />
+      <Helmet>
+        <title>Cadastro</title>
+      </Helmet>
+      <Switch checked={checked} onChange={handleChangeTheme} />
       <SignupContainer maxWidth="sm">
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <LockOutlinedIcon />
