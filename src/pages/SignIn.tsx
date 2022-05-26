@@ -15,6 +15,7 @@ import AppButton from 'components/elements/AppButton';
 import Switch from 'components/elements/Switch';
 import Copyright from 'components/widgets/Copyright';
 import { loginSchema } from 'core/helpers/schemas/login-schema';
+import { useSnackBar } from 'core/hooks/useSnackbar';
 import { useTheme } from 'core/hooks/useTheme';
 import { useToggle } from 'core/hooks/useToggle';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
@@ -52,6 +53,7 @@ const SignIn: React.FC = () => {
 
   //* Hooks
   const { theme, changeTheme } = useTheme();
+  const { showSnackBar } = useSnackBar();
   const [checked, setChecked] = useToggle(theme === 'dark' ? true : false);
 
   //* Métodos
@@ -68,7 +70,7 @@ const SignIn: React.FC = () => {
     setTimeout(() => {
       setIsLoadingButton(false);
       actions.setSubmitting(false);
-      alert(JSON.stringify(values, null, 2));
+      showSnackBar('Bem-vindo', 'success');
     }, 2500);
   };
 
