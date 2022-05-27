@@ -1,5 +1,6 @@
 import { CssBaseline } from '@mui/material';
 import App from 'App';
+import { AuthContextProvider } from 'core/context/AuthContext';
 import { SnackBarProvider } from 'core/context/SnackbarContext';
 import { ThemeProviderWrapper } from 'core/context/ThemeContext';
 import React from 'react';
@@ -11,8 +12,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <HelmetProvider>
       <ThemeProviderWrapper>
         <SnackBarProvider>
-          <CssBaseline />
-          <App />
+          <AuthContextProvider>
+            <CssBaseline />
+            <App />
+          </AuthContextProvider>
         </SnackBarProvider>
       </ThemeProviderWrapper>
     </HelmetProvider>

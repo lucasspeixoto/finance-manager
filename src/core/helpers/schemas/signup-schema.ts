@@ -3,8 +3,9 @@ import * as Yup from 'yup';
 import { Messages } from '../error-messages';
 import { Expressions } from '../expressions';
 
-export const loginSchema = Yup.object()
+export const signupSchema = Yup.object()
   .shape({
+    name: Yup.string().required(Messages.required).trim().min(3, Messages.invalidName),
     email: Yup.string()
       .required(Messages.required)
       .trim()

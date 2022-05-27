@@ -8,27 +8,30 @@ import Avatar from '@mui/material/Avatar';
 import Box, { BoxProps } from '@mui/material/Box';
 import Grid, { GridProps } from '@mui/material/Grid';
 import LinearProgress from '@mui/material/LinearProgress';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import AppButton from 'components/elements/AppButton';
 import Switch from 'components/elements/Switch';
 import Copyright from 'components/widgets/Copyright';
-import { loginSchema } from 'core/helpers/schemas/login-schema';
+import { Error } from 'core/helpers/error-messages';
+import { signinSchema } from 'core/helpers/schemas/signin-schema';
 import { useSnackBar } from 'core/hooks/useSnackbar';
 import { useTheme } from 'core/hooks/useTheme';
 import { useToggle } from 'core/hooks/useToggle';
+import { auth } from 'core/services/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { TextField } from 'formik-mui';
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { Link, useNavigate } from 'react-router-dom';
 
-interface LoginForm {
+interface SigninForm {
   email: string;
   password: string;
 }
 
-const initialValues: LoginForm = {
+const initialValues: SigninForm = {
   email: '',
   password: '',
 };
@@ -55,6 +58,7 @@ const SignIn: React.FC = () => {
   const { theme, changeTheme } = useTheme();
   const { showSnackBar } = useSnackBar();
   const [checked, setChecked] = useToggle(theme === 'dark' ? true : false);
+  const navigate = useNavigate();
 
   //* Métodos
   const handleChangeTheme = () => {
@@ -62,16 +66,25 @@ const SignIn: React.FC = () => {
     theme == 'dark' ? changeTheme('light') : changeTheme('dark');
   };
 
-  const handleSubmitLoginForm = async (
-    values: LoginForm,
-    actions: FormikHelpers<LoginForm>,
-  ) => {
+  // eslint-disable-next-line no-unused-vars
+  const handleSubmit = async (values: SigninForm, actions: FormikHelpers<SigninForm>) => {
     setIsLoadingButton(true);
-    setTimeout(() => {
-      setIsLoadingButton(false);
-      actions.setSubmitting(false);
-      showSnackBar('Bem-vindo', 'success');
-    }, 2500);
+
+    const { email, password } = values;
+
+    await signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        setIsLoadingButton(false);
+        showSnackBar(`Logado: ${user}`, 'success');
+      })
+      .catch((error) => {
+        setIsLoadingButton(false);
+        const errorMessage = Error[error.code];
+        showSnackBar(errorMessage, 'error');
+      });
+
+    navigate('/dashboard');
   };
 
   return (
@@ -93,12 +106,13 @@ const SignIn: React.FC = () => {
             <Box sx={{ mt: 1 }}>
               <Formik
                 initialValues={initialValues}
-                validationSchema={loginSchema}
-                onSubmit={handleSubmitLoginForm}
+                validationSchema={signinSchema}
+                onSubmit={handleSubmit}
               >
                 {({ submitForm, isValid, dirty }) => (
                   <Form>
                     <Field
+                      sx={{ mt: 0 }}
                       component={TextField}
                       margin="normal"
                       fullWidth
@@ -107,6 +121,7 @@ const SignIn: React.FC = () => {
                       label="Email"
                     />
                     <Field
+                      sx={{ mt: 0 }}
                       component={TextField}
                       margin="normal"
                       fullWidth
@@ -137,15 +152,10 @@ const SignIn: React.FC = () => {
                   </Form>
                 )}
               </Formik>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Esqueceu a senha?
-                  </Link>
-                </Grid>
+              <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link href="/signup" variant="body2">
-                    {'Não Possui conta? Cadastre-se'}
+                  <Link style={{ color: '#a6a6a6' }} to="/signup">
+                    Não Possui conta? Cadastre-se
                   </Link>
                 </Grid>
               </Grid>

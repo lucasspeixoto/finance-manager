@@ -1,11 +1,12 @@
-import { Routes } from 'core/config/routes';
+import { AppRoutes } from 'core/config/routes';
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
 function App() {
   return (
-    <React.Fragment>
-      <Routes />
-    </React.Fragment>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }
 
