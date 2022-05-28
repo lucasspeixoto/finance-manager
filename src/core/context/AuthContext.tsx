@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
-import { Error } from 'core/helpers/error-messages';
 import { useSnackBar } from 'core/hooks/useSnackbar';
 import {
+  createUserWithEmailAndPassword,
   onAuthStateChanged,
   sendEmailVerification,
   signInWithEmailAndPassword,
+  UserCredential,
 } from 'firebase/auth';
 import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
 import React, { createContext, useEffect, useState } from 'react';
@@ -13,14 +14,15 @@ import { auth, db } from '../../core/services/firebase';
 import { User } from '../types/user';
 
 interface AuthContextType {
-  isLogged?: any;
-  isLoading?: any;
-  user?: User | undefined | any;
-  signInWithGoogle?: () => Promise<void>;
-  signInWithEmailAndPasswordHandler: (email: string, password: string) => void;
-  registerUser: (loggedUser: any) => void;
-  sendPasswordResetEmail?: (email: string) => Promise<void>;
+  user: User;
+  registerUser: (loggedUser: User) => void;
   logout: () => void;
+  handleCreateUserWithNameEmailAndPassword: (
+    name: string,
+    email: string,
+    password: string,
+  ) => void;
+  handleSignInWithEmailAndPassoword: (email: string, password: string) => void;
 }
 
 export const AuthContext = createContext({} as AuthContextType);
@@ -31,14 +33,11 @@ export const AuthContextProvider: React.FC<{
   //* Estados
   const [user, setUser] = useState<any>({});
   const [isLogged, setIsLogged] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
   //* Hooks
   const { showSnackBar } = useSnackBar();
 
   /**
    * TODO - Verificar o estado de autenticação e salvar em 'user' os dados do usuário logado
-   *
    * @return - void
    */
   const setUserData = async (uid: string) => {
@@ -47,31 +46,28 @@ export const AuthContextProvider: React.FC<{
     querySnapshot.forEach((doc) => {
       if (doc.id.replace('}', '') === uid) {
         const loggedUser = doc.data() as User;
-        setUser(loggedUser);
         setIsLogged(true);
-        setIsLoading(false);
+        setUser(loggedUser);
       }
     });
   };
 
   /**
    * TODO - Observar se houve alteração no estado de autenticação do usuário
-   *
    * @return - void
    */
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUserData(currentUser!.uid);
+      if (currentUser) setUserData(currentUser!.uid);
     });
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [isLogged]);
 
   /**
    * TODO - Envia o e-mail de informação da criação de um conta
-   *
-   * @return - Promise<void>
+   * @return void
    */
   const sendPasswordResetEmail = async () => {
     await sendEmailVerification(auth.currentUser!).then(() => {
@@ -80,56 +76,64 @@ export const AuthContextProvider: React.FC<{
   };
 
   /**
+   * TODO - Receber nome, email e senha para criação novo usuário
+   * @return void
+   */
+  const handleCreateUserWithNameEmailAndPassword = async (
+    name: string,
+    email: string,
+    password: string,
+  ) => {
+    await createUserWithEmailAndPassword(auth, email, password).then(
+      (userCredential: UserCredential) => {
+        const { email, uid } = userCredential.user;
+        const loggedUser: User = {
+          id: uid,
+          name: name,
+          email: email!,
+          avatar: '',
+        };
+        registerUser(loggedUser);
+      },
+    );
+  };
+
+  /**
+   * TODO - Receber email e senha para autenticação
+   * @return void
+   */
+  const handleSignInWithEmailAndPassoword = async (email: string, password: string) => {
+    await signInWithEmailAndPassword(auth, email, password).then(() => {
+      setIsLogged(true);
+    });
+  };
+
+  /**
    * TODO - Insere um novo documento na collection 'users'
-   *
    * @return - void
    */
-  const registerUser = async (loggedUser: User) => {
-    if (loggedUser) {
-      await setDoc(doc(db, 'users', `${loggedUser.id}}`), loggedUser);
+  const registerUser = async (currentUser: User) => {
+    if (currentUser) {
+      await setDoc(doc(db, 'users', `${currentUser.id}}`), currentUser);
       sendPasswordResetEmail();
     }
   };
 
   /**
-   * TODO - Realiza um login com email e senha
-   * @param email string
-   * @param password string
-   *
-   * @return - void
+   * TODO - Remover usuário ativo
+   * @return void
    */
-  const signInWithEmailAndPasswordHandler = async (email: string, password: string) => {
-    //setIsLoading(true);
-
-    await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        showSnackBar(`Bem Vindo: ${user}`, 'success');
-
-        // ...
-      })
-      .catch((error) => {
-        const code: string = error.code as string;
-        const message: string = Error[code];
-        showSnackBar(`Error Code: ${message}`, 'error');
-      });
-  };
-
   const logout = async () => {
-    setIsLogged(false);
-    setUser(undefined);
     await auth.signOut();
   };
 
   return (
     <AuthContext.Provider
       value={{
-        isLogged,
-        isLoading,
         user,
+        handleCreateUserWithNameEmailAndPassword,
+        handleSignInWithEmailAndPassoword,
         registerUser,
-        signInWithEmailAndPasswordHandler,
         logout,
       }}
     >

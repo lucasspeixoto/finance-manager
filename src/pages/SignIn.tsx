@@ -15,11 +15,10 @@ import Switch from 'components/elements/Switch';
 import Copyright from 'components/widgets/Copyright';
 import { Error } from 'core/helpers/error-messages';
 import { signinSchema } from 'core/helpers/schemas/signin-schema';
+import { useAuth } from 'core/hooks/useAuth';
 import { useSnackBar } from 'core/hooks/useSnackbar';
 import { useTheme } from 'core/hooks/useTheme';
 import { useToggle } from 'core/hooks/useToggle';
-import { auth } from 'core/services/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { TextField } from 'formik-mui';
 import React, { useState } from 'react';
@@ -59,6 +58,7 @@ const SignIn: React.FC = () => {
   const { showSnackBar } = useSnackBar();
   const [checked, setChecked] = useToggle(theme === 'dark' ? true : false);
   const navigate = useNavigate();
+  const { handleSignInWithEmailAndPassoword } = useAuth();
 
   //* Métodos
   const handleChangeTheme = () => {
@@ -72,19 +72,29 @@ const SignIn: React.FC = () => {
 
     const { email, password } = values;
 
-    await signInWithEmailAndPassword(auth, email, password)
+    try {
+      handleSignInWithEmailAndPassoword(email, password);
+      showSnackBar(`Bem-vindo ao 'Meu financeiro`, 'success');
+      navigate('/dashboard');
+    } catch (error: any) {
+      console.log(error);
+      const errorMessage = Error[error.code];
+      showSnackBar(errorMessage, 'error');
+    }
+
+    setIsLoadingButton(false);
+    /* await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         setIsLoadingButton(false);
-        showSnackBar(`Logado: ${user}`, 'success');
+        showSnackBar(`Bem-vindo: ${user.displayName}`, 'success');
+        navigate('/dashboard');
       })
       .catch((error) => {
         setIsLoadingButton(false);
         const errorMessage = Error[error.code];
         showSnackBar(errorMessage, 'error');
-      });
-
-    navigate('/dashboard');
+      }); */
   };
 
   return (
@@ -154,7 +164,7 @@ const SignIn: React.FC = () => {
               </Formik>
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link style={{ color: '#a6a6a6' }} to="/signup">
+                  <Link color="primary" to="/signup">
                     Não Possui conta? Cadastre-se
                   </Link>
                 </Grid>

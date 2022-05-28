@@ -20,9 +20,6 @@ import { useAuth } from 'core/hooks/useAuth';
 import { useSnackBar } from 'core/hooks/useSnackbar';
 import { useTheme } from 'core/hooks/useTheme';
 import { useToggle } from 'core/hooks/useToggle';
-import { auth } from 'core/services/firebase';
-import { User } from 'core/types/user';
-import { createUserWithEmailAndPassword, UserCredential } from 'firebase/auth';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { TextField } from 'formik-mui';
 import React, { ChangeEvent, useState } from 'react';
@@ -68,7 +65,7 @@ const SignUp: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   //* Hooks
-  const { registerUser } = useAuth();
+  const { handleCreateUserWithNameEmailAndPassword } = useAuth();
   const { theme, changeTheme } = useTheme();
   const [checked, setChecked] = useToggle(theme === 'dark' ? true : false);
   const { showSnackBar } = useSnackBar();
@@ -87,7 +84,18 @@ const SignUp: React.FC = () => {
 
     const { name, email, password } = values;
 
-    await createUserWithEmailAndPassword(auth, email, password)
+    try {
+      handleCreateUserWithNameEmailAndPassword(name, email, password);
+      setIsLoadingButton(false);
+      showSnackBar(`Bem Vindo: ${name.split(' ')[0]}`, 'success');
+      navigate('/dashboard');
+    } catch (error: any) {
+      setIsLoadingButton(false);
+      const errorMessage = Error[error.code];
+      showSnackBar(errorMessage, 'error');
+    }
+
+    /* await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential: UserCredential) => {
         const { email, uid } = userCredential.user;
         const loggedUser: User = {
@@ -96,16 +104,16 @@ const SignUp: React.FC = () => {
           email: email,
           avatar: '',
         };
-        navigate('/');
         registerUser(loggedUser);
         setIsLoadingButton(false);
         showSnackBar(`Bem Vindo: ${name.split(' ')[0]}`, 'success');
+        navigate('/dashboard');
       })
       .catch((error) => {
         setIsLoadingButton(false);
         const errorMessage = Error[error.code];
         showSnackBar(errorMessage, 'error');
-      });
+      }); */
   };
 
   return (
@@ -183,7 +191,7 @@ const SignUp: React.FC = () => {
           </Formik>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link style={{ color: '#a6a6a6' }} to="/">
+              <Link color="primary" to="/">
                 Ja possui uma conta ? Login
               </Link>
             </Grid>

@@ -2,7 +2,6 @@ import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
 import { Box, Hidden, IconButton, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useAuth } from 'core/hooks/useAuth';
 import { useToggle } from 'core/hooks/useToggle';
 import React from 'react';
 
@@ -37,7 +36,7 @@ export const Header = () => {
   const { theme, changeTheme } = useTheme();
 
   const [checked, setChecked] = useToggle(theme === 'dark' ? true : false);
-  const { user } = useAuth();
+
   //* Métodos
   const handleChangeTheme = () => {
     setChecked();
@@ -46,24 +45,22 @@ export const Header = () => {
 
   return (
     <React.Fragment>
-      {user.name ? (
-        <HeaderWrapper display="flex" alignItems="center">
-          <Box display="flex" alignItems="center">
-            <Switch checked={checked} onChange={handleChangeTheme} />
-          </Box>
-          <Box display="flex" alignItems="center">
-            <Notifications />
-            <HeaderUserbox />
-            <Hidden lgUp>
-              <Tooltip arrow title="Menu">
-                <IconButton color="primary" onClick={toggleSidebar}>
-                  {!sidebarToggle ? <MenuTwoToneIcon /> : <CloseTwoToneIcon />}
-                </IconButton>
-              </Tooltip>
-            </Hidden>
-          </Box>
-        </HeaderWrapper>
-      ) : null}
+      <HeaderWrapper display="flex" alignItems="center">
+        <Box display="flex" alignItems="center">
+          <Switch checked={checked} onChange={handleChangeTheme} />
+        </Box>
+        <Box display="flex" alignItems="center">
+          <Notifications />
+          <HeaderUserbox />
+          <Hidden lgUp>
+            <Tooltip arrow title="Menu">
+              <IconButton color="primary" onClick={toggleSidebar}>
+                {!sidebarToggle ? <MenuTwoToneIcon /> : <CloseTwoToneIcon />}
+              </IconButton>
+            </Tooltip>
+          </Hidden>
+        </Box>
+      </HeaderWrapper>
     </React.Fragment>
   );
 };
