@@ -68,14 +68,15 @@ const SignIn: React.FC = () => {
 
   // eslint-disable-next-line no-unused-vars
   const handleSubmit = async (values: SigninForm, actions: FormikHelpers<SigninForm>) => {
+    console.log(actions);
     setIsLoadingButton(true);
 
     const { email, password } = values;
 
     try {
-      handleSignInWithEmailAndPassoword(email, password);
-      showSnackBar(`Bem-vindo ao 'Meu financeiro`, 'success');
+      await handleSignInWithEmailAndPassoword(email, password);
       navigate('/dashboard');
+      showSnackBar(`Bem-vindo ao 'Meu financeiro`, 'success');
     } catch (error: any) {
       console.log(error);
       const errorMessage = Error[error.code];

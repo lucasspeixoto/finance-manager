@@ -16,6 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useSnackBar } from 'core/hooks/useSnackbar';
 import React, { useRef, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
@@ -62,82 +63,88 @@ export const HeaderUserbox: React.FC = () => {
   const [isOpen, setOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  // eslint-disable-next-line no-undef
+  const { showSnackBar } = useSnackBar();
+
   const { logout, user } = useAuth();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+      showSnackBar('Você foi deslogado', 'info');
+    } catch (e: any) {
+      console.log(e.message);
+    }
   };
 
   return (
     <React.Fragment>
-      {user.name ? (
-        <>
-          <UserBoxButton color="secondary" ref={ref} onClick={() => setOpen(true)}>
-            <Avatar
-              variant="rounded"
-              alt={'Nome'}
-              src="https://lh3.googleusercontent.com/a-/AOh14Gj37hwEKTk89_dqJj5ysJeo3PeQtRsf9t3FPyjdRQ=s96-c"
-            />
-            <Hidden mdDown>
-              <UserBoxText>
-                <UserBoxLabel variant="body1">{user?.name}</UserBoxLabel>
-                <UserBoxDescription variant="body2">{user?.email}</UserBoxDescription>
-              </UserBoxText>
-            </Hidden>
-            <Hidden smDown>
-              <ExpandMoreTwoToneIcon sx={{ ml: 1 }} />
-            </Hidden>
-          </UserBoxButton>
-          <Popover
-            anchorEl={ref.current}
-            onClick={() => setOpen(false)}
-            open={isOpen}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-          >
-            <MenuUserBox sx={{ minWidth: 210 }} display="flex">
-              <Avatar
-                variant="rounded"
-                alt={'Nome'}
-                src="https://lh3.googleusercontent.com/a-/AOh14Gj37hwEKTk89_dqJj5ysJeo3PeQtRsf9t3FPyjdRQ=s96-c"
-              />
-              <UserBoxText>
-                <UserBoxLabel variant="body1">
-                  {TitleCase('lucas sacramoni peixoto')}
-                </UserBoxLabel>
-                <UserBoxDescription variant="body2">
-                  {TitleCase('desenvolvedor de aplicações')}
-                </UserBoxDescription>
-              </UserBoxText>
-            </MenuUserBox>
-            <Divider sx={{ mb: 0 }} />
-            <List sx={{ p: 1 }} component="nav">
-              <ListItem button to="/search" component={NavLink}>
-                <PersonSearchIcon fontSize="small" />
-                <ListItemText primary="Nova Pesquisa" />
-              </ListItem>
-              <ListItem button to="/result" component={NavLink}>
-                <AnalyticsIcon fontSize="small" />
-                <ListItemText primary="Resultado" />
-              </ListItem>
-            </List>
-            <Divider />
-            <Box sx={{ m: 1 }}>
-              <Button color="primary" fullWidth onClick={() => handleLogout()}>
-                <LockOpenTwoToneIcon sx={{ mr: 1 }} />
-                Sair
-              </Button>
-            </Box>
-          </Popover>
-        </>
-      ) : null}
+      <UserBoxButton color="secondary" ref={ref} onClick={() => setOpen(true)}>
+        <Avatar
+          variant="rounded"
+          alt={'Nome'}
+          src="https://lh3.googleusercontent.com/a-/AOh14Gj37hwEKTk89_dqJj5ysJeo3PeQtRsf9t3FPyjdRQ=s96-c"
+        />
+        <Hidden mdDown>
+          <UserBoxText>
+            {user ? <UserBoxLabel variant="body1">{user.name}</UserBoxLabel> : null}
+            {user ? (
+              <UserBoxDescription variant="body2">{user.email}</UserBoxDescription>
+            ) : null}
+          </UserBoxText>
+        </Hidden>
+        <Hidden smDown>
+          <ExpandMoreTwoToneIcon sx={{ ml: 1 }} />
+        </Hidden>
+      </UserBoxButton>
+      <Popover
+        anchorEl={ref.current}
+        onClick={() => setOpen(false)}
+        open={isOpen}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <MenuUserBox sx={{ minWidth: 210 }} display="flex">
+          <Avatar
+            variant="rounded"
+            alt={'Nome'}
+            src="https://lh3.googleusercontent.com/a-/AOh14Gj37hwEKTk89_dqJj5ysJeo3PeQtRsf9t3FPyjdRQ=s96-c"
+          />
+          <UserBoxText>
+            <UserBoxLabel variant="body1">
+              {TitleCase('lucas sacramoni peixoto')}
+            </UserBoxLabel>
+            <UserBoxDescription variant="body2">
+              {TitleCase('desenvolvedor de aplicações')}
+            </UserBoxDescription>
+          </UserBoxText>
+        </MenuUserBox>
+        <Divider sx={{ mb: 0 }} />
+        <List sx={{ p: 1 }} component="nav">
+          <ListItem button to="/search" component={NavLink}>
+            <PersonSearchIcon fontSize="small" />
+            <ListItemText primary="Nova Pesquisa" />
+          </ListItem>
+          <ListItem button to="/result" component={NavLink}>
+            <AnalyticsIcon fontSize="small" />
+            <ListItemText primary="Resultado" />
+          </ListItem>
+        </List>
+        <Divider />
+        <Box sx={{ m: 1 }}>
+          <Button color="primary" fullWidth onClick={() => handleLogout()}>
+            <LockOpenTwoToneIcon sx={{ mr: 1 }} />
+            Sair
+          </Button>
+        </Box>
+      </Popover>
     </React.Fragment>
   );
 };

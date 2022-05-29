@@ -9,15 +9,15 @@ import { HelmetProvider } from 'react-helmet-async';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <HelmetProvider>
-      <ThemeProviderWrapper>
-        <SnackBarProvider>
-          <AuthContextProvider>
+    <AuthContextProvider>
+      <HelmetProvider>
+        <ThemeProviderWrapper>
+          <SnackBarProvider>
             <CssBaseline />
             <App />
-          </AuthContextProvider>
-        </SnackBarProvider>
-      </ThemeProviderWrapper>
-    </HelmetProvider>
+          </SnackBarProvider>
+        </ThemeProviderWrapper>
+      </HelmetProvider>
+    </AuthContextProvider>
   </React.StrictMode>,
 );
