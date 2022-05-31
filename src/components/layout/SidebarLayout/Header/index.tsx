@@ -30,7 +30,7 @@ const HeaderWrapper = styled(Box)(
 `,
 );
 
-export const Header = () => {
+export const Header: React.FC = () => {
   const { sidebarToggle, toggleSidebar } = useSidebar();
 
   const { theme, changeTheme } = useTheme();

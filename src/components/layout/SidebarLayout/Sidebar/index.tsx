@@ -6,7 +6,7 @@ import Scrollbars from 'react-custom-scrollbars-2';
 
 import { Logo } from '../../../elements/Logo';
 import { SidebarMenu } from './SidebarMenu';
-import { MenuItems, menuItemsUsers } from './SidebarMenu/items';
+import { appMenuItems, MenuItems } from './SidebarMenu/items';
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -38,14 +38,14 @@ const TopSection = styled(Box)(
 export const Sidebar: React.FC = () => {
   const { sidebarToggle, toggleSidebar } = useSidebar();
   const closeSidebar = () => toggleSidebar();
-  const [menuItems, setMenuItems] = useState<MenuItems[]>(menuItemsUsers);
+  const [menuItems, setMenuItems] = useState<MenuItems[]>(appMenuItems);
 
   useEffect(() => {
-    setMenuItems(menuItemsUsers);
+    setMenuItems(appMenuItems);
   }, [menuItems]);
 
   return (
-    <>
+    <React.Fragment>
       <Hidden lgDown>
         <SidebarWrapper>
           <Scrollbars autoHide>
@@ -74,6 +74,6 @@ export const Sidebar: React.FC = () => {
           </SidebarWrapper>
         </Drawer>
       </Hidden>
-    </>
+    </React.Fragment>
   );
 };

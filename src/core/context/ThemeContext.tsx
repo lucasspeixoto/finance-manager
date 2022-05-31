@@ -15,8 +15,6 @@ export const ThemeContext = createContext<IThemeContext>({} as IThemeContext);
 export const ThemeProviderWrapper: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  //const lastSelectedTheme = localStorage.getItem('appTheme') || 'dark';
-
   const [selectedTheme, setSelectedTheme] = useLocalStorage<string>(
     '@meu-financeiro: theme',
     'dark',

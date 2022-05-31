@@ -1,7 +1,7 @@
 import React, { createContext, useState } from 'react';
 
 interface SidebarContextProps {
-  sidebarToggle: any;
+  sidebarToggle: boolean;
   toggleSidebar: () => void;
 }
 
@@ -13,6 +13,7 @@ export const SidebarProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const [sidebarToggle, setSidebarToggle] = useState(false);
+
   const toggleSidebar = () => {
     setSidebarToggle(!sidebarToggle);
   };

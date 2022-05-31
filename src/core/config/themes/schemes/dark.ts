@@ -31,7 +31,7 @@ const colors = {
   },
   shadows: {
     success:
-      '0px 1px 4px rgba(68, 264, 0, 0.85), 0px 3px 12px 2px rgba(68, 264, 0, 0.95)',
+      '0px 1px 4px rgba(68, 214, 0, 0.25), 0px 3px 12px 2px rgba(68, 214, 0, 0.35)',
     error:
       '0px 1px 4px rgba(255, 25, 67, 0.25), 0px 3px 12px 2px rgba(255, 25, 67, 0.35)',
     info: '0px 1px 4px rgba(51, 194, 255, 0.25), 0px 3px 12px 2px rgba(51, 194, 255, 0.35)',
@@ -921,6 +921,7 @@ export const Dark = createTheme({
         },
         standardInfo: {
           color: colors.info.main,
+          opacity: 0.7,
         },
         action: {
           color: colors.alpha.black[70],

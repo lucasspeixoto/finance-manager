@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import Loading from 'components/elements/Loading';
 import BaseLayout from 'components/layout/BaseLayout';
+import SidebarLayout from 'components/layout/SidebarLayout';
 import ForgotPassword from 'pages/ForgotPassword';
 import SignIn from 'pages/SignIn';
 import SignUp from 'pages/SignUp';
@@ -23,9 +24,8 @@ const Loader = (Component: ComponentType) => (props: JSX.IntrinsicAttributes) =>
     </Suspense>
   );
 
-/* const SignIn = Loader(lazy(() => import('../../../pages/SignIn')));
-const SignUp = Loader(lazy(() => import('../../../pages/SignUp'))); */
 const Dashboard = Loader(lazy(() => import('../../../pages/Dashboard')));
+const FinanceProfile = Loader(lazy(() => import('../../../pages/FinanceProfile')));
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -37,7 +37,19 @@ export const AppRoutes: React.FC = () => {
         path="/dashboard"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <SidebarLayout>
+              <Dashboard />
+            </SidebarLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <SidebarLayout>
+              <FinanceProfile />
+            </SidebarLayout>
           </ProtectedRoute>
         }
       />

@@ -6,10 +6,6 @@ import { NavLink as RouterLink, useLocation } from 'react-router-dom';
 
 import { SidebarContext } from '../../../../../core/context/SidebarContext';
 import { MenuItems } from './items';
-/* const icons = {
-  '/search': <PersonSearchIcon />,
-  '/result': <AnalyticsIcon />,
-}; */
 
 const MenuWrapper = styled(List)(
   ({ theme }) => `
@@ -131,7 +127,7 @@ export const SidebarMenu: React.FC<SideBarMenuProps> = ({ menuItems }) => {
   const { toggleSidebar } = useContext(SidebarContext);
 
   return (
-    <>
+    <React.Fragment>
       {menuItems.map((section) => (
         <MenuWrapper
           key={section.heading}
@@ -158,6 +154,6 @@ export const SidebarMenu: React.FC<SideBarMenuProps> = ({ menuItems }) => {
           </SubMenuWrapper>
         </MenuWrapper>
       ))}
-    </>
+    </React.Fragment>
   );
 };

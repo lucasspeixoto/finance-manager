@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
 import Loading from 'components/elements/Loading';
 import BaseLayout from 'components/layout/BaseLayout';
-import SidebarLayout from 'components/layout/SidebarLayout';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAppSelector } from 'store/hooks';
@@ -23,11 +22,7 @@ const ProtectedRoute: React.FC<{
   }
 
   if (!isUserUnauthenticationEmpty) {
-    return (
-      <SidebarLayout>
-        <React.Fragment>{children}</React.Fragment>
-      </SidebarLayout>
-    );
+    return <React.Fragment>{children}</React.Fragment>;
   }
 
   return <Navigate to="/" />;

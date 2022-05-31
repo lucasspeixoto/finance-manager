@@ -51,7 +51,7 @@ const LogoText = styled(Box)(
 
 export const Logo = () => {
   return (
-    <>
+    <React.Fragment>
       <LogoWrapper to="/">
         <AppLogo src={appLogo} alt="Logo Aplicação" />
         <Hidden smDown>
@@ -59,10 +59,10 @@ export const Logo = () => {
             <Tooltip title="Versão 1.0.0" arrow placement="right">
               <VersionBadge>1.0.0</VersionBadge>
             </Tooltip>
-            <LogoText>Gerenciador</LogoText>
+            <LogoText>Meu Financeiro</LogoText>
           </LogoTextWrapper>
         </Hidden>
       </LogoWrapper>
-    </>
+    </React.Fragment>
   );
 };

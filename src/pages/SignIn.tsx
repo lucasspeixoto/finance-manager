@@ -75,9 +75,11 @@ const SignIn: React.FC = () => {
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        setIsLoadingButton(false);
-        showSnackBar(`Bem-vindo ao 'Meu Financeiro'`, 'success');
-        if (user) navigate('/dashboard');
+        if (user) {
+          setIsLoadingButton(false);
+          showSnackBar(`Bem-vindo ao 'Meu Financeiro'`, 'success');
+          navigate('/dashboard');
+        }
       })
       .catch((error) => {
         setIsLoadingButton(false);

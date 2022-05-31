@@ -86,18 +86,21 @@ const SignUp: React.FC = () => {
   };
   const dispatch = useAppDispatch();
 
-  const updateUserFirebaseProfile = async (name: string) => {
+  const updateUserDisplayName = async (name: string) => {
     await updateProfile(auth.currentUser!, {
       displayName: name,
     })
       .then(() => {
-        const newUser: IUser = {
-          uid: auth.currentUser!.uid,
-          displayName: name,
-          email: auth.currentUser!.email!,
-          photoUrl: auth.currentUser!.photoURL,
-        };
-        dispatch(userActions.saveUser(newUser));
+        const currentUser = auth.currentUser;
+        if (currentUser) {
+          const newUser: IUser = {
+            uid: currentUser.uid,
+            displayName: name,
+            email: currentUser.email,
+            photoUrl: currentUser.photoURL,
+          };
+          dispatch(userActions.saveUser(newUser));
+        }
       })
       .catch((error) => {
         const errorMessage = Error[error.code];
@@ -114,7 +117,7 @@ const SignUp: React.FC = () => {
     await createUserWithEmailAndPassword(auth, email, password)
       // eslint-disable-next-line no-unused-vars
       .then((userCredential: UserCredential) => {
-        updateUserFirebaseProfile(name);
+        updateUserDisplayName(name);
       })
       .catch((error) => {
         const errorMessage = Error[error.code];

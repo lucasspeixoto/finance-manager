@@ -1,14 +1,9 @@
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { ReactNode } from 'react';
-import { Outlet } from 'react-router-dom';
+import React from 'react';
 
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
-
-interface SidebarLayoutProps {
-  children?: ReactNode;
-}
 
 const MainWrapper = styled(Box)(
   ({ theme }) => `
@@ -30,14 +25,15 @@ const MainContent = styled(Box)(
 `,
 );
 
-const SidebarLayout: React.FC<SidebarLayoutProps> = () => {
+const SidebarLayout: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   return (
     <React.Fragment>
       <Sidebar />
       <MainWrapper>
         <Header />
         <MainContent>
-          <Outlet />
+          {/* <Outlet /> */}
+          {children}
         </MainContent>
       </MainWrapper>
     </React.Fragment>

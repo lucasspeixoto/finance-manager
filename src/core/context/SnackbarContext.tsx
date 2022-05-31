@@ -40,10 +40,15 @@ export const SnackBarProvider: React.FC<SnackBarContextProviderProps> = ({
           onClose={handleClose}
           anchorOrigin={{
             vertical: 'top',
-            horizontal: 'center',
+            horizontal: 'right',
           }}
         >
-          <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
+          <Alert
+            variant="filled"
+            onClose={handleClose}
+            severity={severity}
+            sx={{ width: '100%' }}
+          >
             {message}
           </Alert>
         </Snackbar>
