@@ -6,8 +6,7 @@
 
 ## 💻 Projeto
 
-[Template](https://github.com/lucasspeixoto/template_react_typescript_material)  Projeto de controle financeiro para auxilio pessoal no controle de ganhos e despesas de minha família com minha esposa, Liana Fernandes.
-
+[Template](https://github.com/lucasspeixoto/template_react_typescript_material) Projeto de controle financeiro para auxilio pessoal no controle de ganhos e despesas de minha família com minha esposa, Liana Fernandes.
 
 ## 🔖 Layout
 

@@ -1,124 +1,180 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Login } from '@mui/icons-material';
+import styled from '@emotion/styled';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import { IconButton, InputAdornment } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
+import Box, { BoxProps } from '@mui/material/Box';
+import Grid, { GridProps } from '@mui/material/Grid';
+import LinearProgress from '@mui/material/LinearProgress';
 import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import AuthButton from 'components/elements/AuthButton';
+import AppButton from 'components/elements/AppButton';
 import Switch from 'components/elements/Switch';
 import Copyright from 'components/widgets/Copyright';
+import { Error } from 'core/helpers/error-messages';
+import { signinSchema } from 'core/helpers/schemas/signin-schema';
+import { useSnackBar } from 'core/hooks/useSnackbar';
 import { useTheme } from 'core/hooks/useTheme';
-import React, { ChangeEvent, useState } from 'react';
+import { useToggle } from 'core/hooks/useToggle';
+import { auth } from 'core/services/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { TextField } from 'formik-mui';
+import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { Link, useNavigate } from 'react-router-dom';
+
+import LoginBackground from './../assets/portrait-background.jpg';
+
+interface SigninForm {
+  email: string;
+  password: string;
+}
+
+const initialValues: SigninForm = {
+  email: '',
+  password: '',
+};
+
+const BackgroundGrid = styled(Grid)<GridProps>(() => ({
+  backgroundImage: `url(${LoginBackground})`, //url(https://source.unsplash.com/random)',
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+}));
+
+const SigninBox = styled(Box)<BoxProps>(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+}));
 
 const SignIn: React.FC = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  //* Estados
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoadingButton, setIsLoadingButton] = useState(false);
+
+  //* Hooks
+  const { theme, changeTheme } = useTheme();
+  const { showSnackBar } = useSnackBar();
+  const [checked, setChecked] = useToggle(theme === 'dark' ? true : false);
+  const navigate = useNavigate();
+
+  //* Métodos
+  const handleChangeTheme = () => {
+    setChecked();
+    theme == 'dark' ? changeTheme('light') : changeTheme('dark');
   };
 
-  const { theme, changeTheme } = useTheme();
+  // eslint-disable-next-line no-unused-vars
+  const handleSubmit = async (values: SigninForm, actions: FormikHelpers<SigninForm>) => {
+    setIsLoadingButton(true);
 
-  /**
-   * checked = true (Na direita) Dark | false (Na esquerda) Light
-   */
-  const [checked, setChecked] = useState<boolean>(() => {
-    return theme == 'dark' ? true : false;
-  });
+    const { email, password } = values;
 
-  const changeThemeHandle = (event: ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-    theme == 'dark' ? changeTheme('light') : changeTheme('dark');
+    await signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        if (user) {
+          setIsLoadingButton(false);
+          showSnackBar(`Bem-vindo ao 'Meu Financeiro'`, 'success');
+          navigate('/dashboard');
+        }
+      })
+      .catch((error) => {
+        setIsLoadingButton(false);
+        const errorMessage = Error[error.code];
+        showSnackBar(errorMessage, 'error');
+      });
+
+    setIsLoadingButton(false);
   };
 
   return (
     <React.Fragment>
+      <Helmet>
+        <title>Login</title>
+      </Helmet>
       <Grid container component="main" sx={{ height: '100vh' }}>
-        <Grid
-          item
-          xs={false}
-          sm={4}
-          md={8}
-          sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random)',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
+        <BackgroundGrid item xs={false} sm={4} md={8} />
         <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square>
-          <Switch checked={checked} onChange={changeThemeHandle} />
-          <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
+          <Switch checked={checked} onChange={handleChangeTheme} />
+          <SigninBox sx={{ my: 8, mx: 4 }}>
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
               Login
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="E-mail"
-                name="email"
-                autoComplete="email"
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Senha"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Lembrar"
-              />
-              <AuthButton
-                type="submit"
-                disabled={false}
-                label="Entrar"
-                icon={<Login />}
-              />
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Esqueceu a senha?
+            <Box sx={{ mt: 1 }}>
+              <Formik
+                initialValues={initialValues}
+                validationSchema={signinSchema}
+                onSubmit={handleSubmit}
+              >
+                {({ submitForm, isValid, dirty }) => (
+                  <Form>
+                    <Field
+                      sx={{ mt: 0 }}
+                      component={TextField}
+                      margin="normal"
+                      fullWidth
+                      name="email"
+                      type="email"
+                      label="E-mail"
+                    />
+                    <Field
+                      sx={{ mt: 0 }}
+                      component={TextField}
+                      margin="normal"
+                      fullWidth
+                      type={showPassword ? 'text' : 'password'}
+                      label="Senha"
+                      name="password"
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={() => setShowPassword((prev) => !prev)}
+                            >
+                              {showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    {isLoadingButton ? <LinearProgress /> : null}
+                    <AppButton
+                      type="submit"
+                      disabled={isLoadingButton || !isValid || !dirty}
+                      onClick={submitForm}
+                      label="Login"
+                      icon={<PersonAddAlt1Icon />}
+                    />
+                  </Form>
+                )}
+              </Formik>
+              <Grid container justifyContent="space-between">
+                <Grid item>
+                  <Link color="primary" to="/forgot-password">
+                    Esqueceu a senha ?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="/signup" variant="body2">
-                    {'Não Possui conta? Cadastre-se'}
+                  <Link color="primary" to="/signup">
+                    Não Possui conta? Cadastre-se
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright text="Seu Site" redirectUrl="https://mui.com" />
+              <Copyright
+                text="Meu Financeiro"
+                redirectUrl="https://lucasspeixoto.github.io/profile"
+              />
             </Box>
-          </Box>
+          </SigninBox>
         </Grid>
       </Grid>
     </React.Fragment>

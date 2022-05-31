@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@mui/material';
-import React, { createContext, useMemo } from 'react';
+import { useLocalStorage } from 'core/hooks/useLocalStorage';
+import React, { createContext, useState } from 'react';
 
 import { dartThemeCreator, lightThemeCreator } from '../config/themes/base';
 
@@ -14,17 +15,18 @@ export const ThemeContext = createContext<IThemeContext>({} as IThemeContext);
 export const ThemeProviderWrapper: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const lastSelectedTheme = useMemo(() => {
-    return localStorage.getItem('appTheme') || 'dark';
-  }, []);
+  const [selectedTheme, setSelectedTheme] = useLocalStorage<string>(
+    '@meu-financeiro: theme',
+    'dark',
+  );
 
-  const [theme, setTheme] = React.useState(lastSelectedTheme);
+  const [theme, setTheme] = useState(selectedTheme);
 
   const darkTheme = dartThemeCreator('Dark');
   const lightTheme = lightThemeCreator('Light');
 
   const changeTheme = (theme: string) => {
-    localStorage.setItem('appTheme', theme);
+    setSelectedTheme(theme);
     setTheme(theme);
   };
 

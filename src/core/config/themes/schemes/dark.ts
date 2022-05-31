@@ -921,6 +921,7 @@ export const Dark = createTheme({
         },
         standardInfo: {
           color: colors.info.main,
+          opacity: 0.7,
         },
         action: {
           color: colors.alpha.black[70],
