@@ -1,7 +1,7 @@
-import AnalyticsIcon from '@mui/icons-material/Analytics';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
-import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+import PersonIcon from '@mui/icons-material/Person';
+import StackedBarChartIcon from '@mui/icons-material/StackedBarChart';
 import {
   Avatar,
   Box,
@@ -136,13 +136,13 @@ export const HeaderUserbox: React.FC = () => {
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
-          <ListItem button to="/search" component={NavLink}>
-            <PersonSearchIcon fontSize="small" />
-            <ListItemText primary="Nova Pesquisa" />
+          <ListItem button to="/profile" component={NavLink}>
+            <PersonIcon fontSize="small" />
+            <ListItemText primary="Meu Perfil" />
           </ListItem>
-          <ListItem button to="/result" component={NavLink}>
-            <AnalyticsIcon fontSize="small" />
-            <ListItemText primary="Resultado" />
+          <ListItem button to="/dashboard" component={NavLink}>
+            <StackedBarChartIcon fontSize="small" />
+            <ListItemText primary="Dashboards" />
           </ListItem>
         </List>
         <Divider />

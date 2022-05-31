@@ -1,6 +1,11 @@
+import PersonIcon from '@mui/icons-material/Person';
+import StackedBarChartIcon from '@mui/icons-material/StackedBarChart';
+import React from 'react';
+
 export interface MenuItem {
   name: string;
   link: string;
+  icon?: React.ReactNode;
 }
 
 export interface MenuItems {
@@ -15,10 +20,12 @@ export const appMenuItems: MenuItems[] = [
       {
         name: 'Perfil',
         link: '/profile',
+        icon: <PersonIcon />,
       },
       {
         name: 'Dashboards',
         link: '/result',
+        icon: <StackedBarChartIcon />,
       },
       {
         name: 'Nova Inclusão',

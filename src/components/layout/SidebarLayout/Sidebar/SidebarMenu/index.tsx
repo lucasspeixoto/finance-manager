@@ -145,7 +145,7 @@ export const SidebarMenu: React.FC<SideBarMenuProps> = ({ menuItems }) => {
                   component={RouterLink}
                   onClick={toggleSidebar}
                   to={item.link}
-                  startIcon={<AnalyticsIcon />}
+                  startIcon={item.icon ? item.icon : <AnalyticsIcon />}
                 >
                   {item.name}
                 </Button>
