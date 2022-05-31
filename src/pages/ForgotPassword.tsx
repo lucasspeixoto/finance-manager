@@ -24,6 +24,9 @@ import { TextField } from 'formik-mui';
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
+
+import LoginBackground from './../assets/landscape2-background.jpg';
+
 interface ForgotPasswordForm {
   email: string;
 }
@@ -31,10 +34,9 @@ interface ForgotPasswordForm {
 const initialValues: ForgotPasswordForm = {
   email: '',
 };
-//import LoginBackground from './../assets/login-background.png';
 
 const BackgroundContainer = styled(Container)<ContainerProps>(() => ({
-  backgroundImage: 'url(https://source.unsplash.com/random)',
+  backgroundImage: `url(${LoginBackground})`, //url(https://source.unsplash.com/random)',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   backgroundPosition: 'center',

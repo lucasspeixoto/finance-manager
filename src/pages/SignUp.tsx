@@ -35,6 +35,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { userActions } from 'store/auth-slice';
 import { useAppDispatch } from 'store/hooks';
 
+import LoginBackground from './../assets/landscape-background.jpg';
+
 interface SignupForm {
   name: string;
   email: string;
@@ -46,10 +48,9 @@ const initialValues: SignupForm = {
   email: '',
   password: '',
 };
-//import LoginBackground from './../assets/login-background.png';
 
 const BackgroundContainer = styled(Container)<ContainerProps>(() => ({
-  backgroundImage: 'url(https://source.unsplash.com/random)',
+  backgroundImage: `url(${LoginBackground})`, //url(https://source.unsplash.com/random)',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
@@ -145,7 +146,7 @@ const SignUp: React.FC = () => {
       <Grid container justifyContent="flex-end">
         <Switch checked={checked} onChange={handleChangeTheme} />
       </Grid>
-      <SignupContainer maxWidth="sm">
+      <SignupContainer maxWidth="xs">
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <DataSaverOnIcon />
         </Avatar>
