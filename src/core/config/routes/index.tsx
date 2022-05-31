@@ -1,8 +1,9 @@
 /* eslint-disable no-undef */
 import Loading from 'components/elements/Loading';
 import BaseLayout from 'components/layout/BaseLayout';
-/* import SignIn from 'pages/SignIn';
-import SignUp from 'pages/SignUp'; */
+import ForgotPassword from 'pages/ForgotPassword';
+import SignIn from 'pages/SignIn';
+import SignUp from 'pages/SignUp';
 import React, { ComponentType, lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
@@ -22,8 +23,8 @@ const Loader = (Component: ComponentType) => (props: JSX.IntrinsicAttributes) =>
     </Suspense>
   );
 
-const SignIn = Loader(lazy(() => import('../../../pages/SignIn')));
-const SignUp = Loader(lazy(() => import('../../../pages/SignUp')));
+/* const SignIn = Loader(lazy(() => import('../../../pages/SignIn')));
+const SignUp = Loader(lazy(() => import('../../../pages/SignUp'))); */
 const Dashboard = Loader(lazy(() => import('../../../pages/Dashboard')));
 
 export const AppRoutes: React.FC = () => {
@@ -31,6 +32,7 @@ export const AppRoutes: React.FC = () => {
     <Routes>
       <Route path="/" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route
         path="/dashboard"
         element={

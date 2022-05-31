@@ -16,6 +16,7 @@ import { User } from '../types/user';
 
 interface AuthContextType {
   user: any;
+  firestoreUser: User | null;
   isLoading: boolean;
   isLogged: boolean;
   registerUser: (loggedUser: User) => void;
@@ -38,6 +39,7 @@ export const AuthContextProvider: React.FC<{
 }> = ({ children }) => {
   //* Estados
   const [user, setUser] = useState({});
+  const [firestoreUser, setFirestoreUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLogged, setIsLogged] = useState<boolean>(false);
   //* Hooks
@@ -49,9 +51,13 @@ export const AuthContextProvider: React.FC<{
     querySnapshot.forEach((doc) => {
       if (doc.id.replace('}', '') === uid) {
         const loggedUser = doc.data() as User;
-        setUser(loggedUser);
+        setFirestoreUser(loggedUser);
       }
     });
+
+    if (user) {
+      setIsLogged(false);
+    }
   };
 
   const sendPasswordResetEmail = async () => {
@@ -100,21 +106,18 @@ export const AuthContextProvider: React.FC<{
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser!);
       setIsLoading(false);
+      if (currentUser != null) setUserData(currentUser!.uid);
     });
     return () => {
       unsubscribe();
     };
   }, []);
 
-  useEffect(() => {
-    const isUserLogged = auth.currentUser && user;
-    isUserLogged ? setIsLogged(true) : setIsLogged(false);
-  }, []);
-
   return (
     <AuthContext.Provider
       value={{
         user,
+        firestoreUser,
         isLoading,
         isLogged,
         handleCreateUserWithNameEmailAndPassword,

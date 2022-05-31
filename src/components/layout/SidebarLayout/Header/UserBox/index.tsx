@@ -17,11 +17,12 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useSnackBar } from 'core/hooks/useSnackbar';
+import { auth } from 'core/services/firebase';
+import { signOut } from 'firebase/auth';
 import React, { useRef, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-
-import { TitleCase } from '../../../../../core/helpers/format-data';
-import { useAuth } from '../../../../../core/hooks/useAuth';
+import { userActions } from 'store/auth-slice';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -62,19 +63,27 @@ export const HeaderUserbox: React.FC = () => {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
   const navigate = useNavigate();
+  const user = useAppSelector((state) => state.auth.user);
 
-  // eslint-disable-next-line no-undef
   const { showSnackBar } = useSnackBar();
 
-  const { logout, user } = useAuth();
+  const dispatch = useAppDispatch();
 
   const handleLogout = async () => {
     try {
-      await logout();
-      navigate('/');
-      showSnackBar('Você foi deslogado', 'info');
-    } catch (e: any) {
-      console.log(e.message);
+      await signOut(auth)
+        .then(() => {
+          navigate('/');
+          dispatch(userActions.removeUser());
+          showSnackBar('Você foi deslogado', 'info');
+        })
+        // eslint-disable-next-line no-unused-vars
+        .catch((error) => {
+          showSnackBar(`Error ao deslogar, tente novamente`, 'error');
+        });
+      // eslint-disable-next-line no-unused-vars
+    } catch (error) {
+      showSnackBar(`Error ao deslogar, tente novamente`, 'error');
     }
   };
 
@@ -87,12 +96,12 @@ export const HeaderUserbox: React.FC = () => {
           src="https://lh3.googleusercontent.com/a-/AOh14Gj37hwEKTk89_dqJj5ysJeo3PeQtRsf9t3FPyjdRQ=s96-c"
         />
         <Hidden mdDown>
-          <UserBoxText>
-            {user ? <UserBoxLabel variant="body1">{user.name}</UserBoxLabel> : null}
-            {user ? (
+          {user ? (
+            <UserBoxText>
+              <UserBoxLabel variant="body1">{user.displayName}</UserBoxLabel>
               <UserBoxDescription variant="body2">{user.email}</UserBoxDescription>
-            ) : null}
-          </UserBoxText>
+            </UserBoxText>
+          ) : null}
         </Hidden>
         <Hidden smDown>
           <ExpandMoreTwoToneIcon sx={{ ml: 1 }} />
@@ -117,14 +126,13 @@ export const HeaderUserbox: React.FC = () => {
             alt={'Nome'}
             src="https://lh3.googleusercontent.com/a-/AOh14Gj37hwEKTk89_dqJj5ysJeo3PeQtRsf9t3FPyjdRQ=s96-c"
           />
-          <UserBoxText>
-            <UserBoxLabel variant="body1">
-              {TitleCase('lucas sacramoni peixoto')}
-            </UserBoxLabel>
-            <UserBoxDescription variant="body2">
-              {TitleCase('desenvolvedor de aplicações')}
-            </UserBoxDescription>
-          </UserBoxText>
+
+          {user ? (
+            <UserBoxText>
+              <UserBoxLabel variant="body1">{user.displayName}</UserBoxLabel>
+              <UserBoxDescription variant="body2">{user.email}</UserBoxDescription>
+            </UserBoxText>
+          ) : null}
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">

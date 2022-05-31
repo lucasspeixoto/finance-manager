@@ -41,18 +41,10 @@ export const Notifications: React.FC = () => {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
 
-  const handleOpen = (): void => {
-    setOpen(true);
-  };
-
-  const handleClose = (): void => {
-    setOpen(false);
-  };
-
   return (
     <React.Fragment>
       <Tooltip arrow title="Notificações">
-        <IconButton color="primary" ref={ref} onClick={handleOpen}>
+        <IconButton color="primary" ref={ref} onClick={() => setOpen(true)}>
           <NotificationsBadge
             badgeContent={2}
             anchorOrigin={{
@@ -66,7 +58,7 @@ export const Notifications: React.FC = () => {
       </Tooltip>
       <Popover
         anchorEl={ref.current}
-        onClose={handleClose}
+        onClick={() => setOpen(false)}
         open={isOpen}
         anchorOrigin={{
           vertical: 'top',

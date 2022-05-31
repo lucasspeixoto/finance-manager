@@ -2,34 +2,35 @@
 import Loading from 'components/elements/Loading';
 import BaseLayout from 'components/layout/BaseLayout';
 import SidebarLayout from 'components/layout/SidebarLayout';
-import { useAuth } from 'core/hooks/useAuth';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
+import { useAppSelector } from 'store/hooks';
 
 const ProtectedRoute: React.FC<{
   children: JSX.Element;
 }> = ({ children }) => {
-  const { user, isLoading, isLogged } = useAuth();
+  const user = useAppSelector((state) => state.auth.user);
+  const isLoading = useAppSelector((state) => state.auth.isLoading);
 
-  if (!user) {
-    return <Navigate to="/" />;
+  const isUserUnauthenticationEmpty = user ? Object.keys(user).length === 0 : true;
+
+  if (isLoading) {
+    return (
+      <BaseLayout>
+        <Loading />
+      </BaseLayout>
+    );
   }
 
-  console.log(isLogged);
+  if (!isUserUnauthenticationEmpty) {
+    return (
+      <SidebarLayout>
+        <React.Fragment>{children}</React.Fragment>
+      </SidebarLayout>
+    );
+  }
 
-  return (
-    <React.Fragment>
-      {!isLoading ? (
-        <SidebarLayout>
-          {isLogged === true ? <React.Fragment>{children}</React.Fragment> : null}
-        </SidebarLayout>
-      ) : (
-        <BaseLayout>
-          <Loading />
-        </BaseLayout>
-      )}
-    </React.Fragment>
-  );
+  return <Navigate to="/" />;
 };
 
 export default ProtectedRoute;

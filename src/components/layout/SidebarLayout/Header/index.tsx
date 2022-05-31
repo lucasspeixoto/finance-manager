@@ -44,23 +44,21 @@ export const Header = () => {
   };
 
   return (
-    <React.Fragment>
-      <HeaderWrapper display="flex" alignItems="center">
-        <Box display="flex" alignItems="center">
-          <Switch checked={checked} onChange={handleChangeTheme} />
-        </Box>
-        <Box display="flex" alignItems="center">
-          <Notifications />
-          <HeaderUserbox />
-          <Hidden lgUp>
-            <Tooltip arrow title="Menu">
-              <IconButton color="primary" onClick={toggleSidebar}>
-                {!sidebarToggle ? <MenuTwoToneIcon /> : <CloseTwoToneIcon />}
-              </IconButton>
-            </Tooltip>
-          </Hidden>
-        </Box>
-      </HeaderWrapper>
-    </React.Fragment>
+    <HeaderWrapper display="flex" alignItems="center">
+      <Box display="flex" alignItems="center">
+        <Switch checked={checked} onChange={handleChangeTheme} />
+      </Box>
+      <Box display="flex" alignItems="center">
+        <Notifications />
+        <HeaderUserbox />
+        <Hidden lgUp>
+          <Tooltip arrow title="Menu">
+            <IconButton color="primary" onClick={toggleSidebar}>
+              {!sidebarToggle ? <MenuTwoToneIcon /> : <CloseTwoToneIcon />}
+            </IconButton>
+          </Tooltip>
+        </Hidden>
+      </Box>
+    </HeaderWrapper>
   );
 };
