@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 import Loading from 'components/elements/Loading';
 import BaseLayout from 'components/layout/BaseLayout';
+import { useAppSelector } from 'core/store/hooks';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAppSelector } from 'store/hooks';
 
 const ProtectedRoute: React.FC<{
   children: JSX.Element;

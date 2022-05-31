@@ -55,9 +55,8 @@ const FinanceProfile: React.FC = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>Forms - Components</title>
+        <title>Meu Perfil</title>
       </Helmet>
-
       <Container maxWidth="lg">
         <Grid
           container

@@ -1,11 +1,11 @@
 import { AppRoutes } from 'core/config/routes';
 import { auth } from 'core/services/firebase';
+import { userActions } from 'core/store/auth-slice';
+import { useAppDispatch } from 'core/store/hooks';
 import { IUser } from 'core/types/firebase-user';
 import { onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { userActions } from 'store/auth-slice';
-import { useAppDispatch } from 'store/hooks';
 
 function App() {
   const dispatch = useAppDispatch();

@@ -121,7 +121,7 @@ interface SideBarMenuProps {
   menuItems: MenuItems[];
 }
 
-export const SidebarMenu: React.FC<SideBarMenuProps> = ({ menuItems }) => {
+const SidebarMenu: React.FC<SideBarMenuProps> = ({ menuItems }) => {
   const location = useLocation();
 
   const { toggleSidebar } = useContext(SidebarContext);
@@ -157,3 +157,5 @@ export const SidebarMenu: React.FC<SideBarMenuProps> = ({ menuItems }) => {
     </React.Fragment>
   );
 };
+
+export default SidebarMenu;

@@ -3,8 +3,6 @@ import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-/* import DarkStefaniniLogo from "@assets/stf_simbol_dark.svg";
-import LightStefaniniLogo from "@assets/stf_simbol_light.svg"; */
 import appLogo from '../../assets/favicon.svg';
 
 const LogoWrapper = styled(Link)(
@@ -49,10 +47,10 @@ const LogoText = styled(Box)(
 `,
 );
 
-export const Logo = () => {
+const Logo: React.FC = () => {
   return (
     <React.Fragment>
-      <LogoWrapper to="/">
+      <LogoWrapper to="/dashboard">
         <AppLogo src={appLogo} alt="Logo Aplicação" />
         <Hidden smDown>
           <LogoTextWrapper>
@@ -66,3 +64,5 @@ export const Logo = () => {
     </React.Fragment>
   );
 };
+
+export default Logo;

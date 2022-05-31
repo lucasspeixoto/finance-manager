@@ -2,8 +2,8 @@ import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React from 'react';
 
-import { Header } from './Header';
-import { Sidebar } from './Sidebar';
+import Header from './Header';
+import Sidebar from './Sidebar';
 
 const MainWrapper = styled(Box)(
   ({ theme }) => `

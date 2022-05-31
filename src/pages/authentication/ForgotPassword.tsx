@@ -25,7 +25,7 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 
-import LoginBackground from './../assets/landscape2-background.jpg';
+import LoginBackground from '../../assets/landscape2-background.jpg';
 
 interface ForgotPasswordForm {
   email: string;

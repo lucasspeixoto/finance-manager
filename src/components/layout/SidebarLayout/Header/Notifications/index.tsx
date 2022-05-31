@@ -37,7 +37,7 @@ const NotificationsBadge = styled(Badge)(
 `,
 );
 
-export const Notifications: React.FC = () => {
+const Notifications: React.FC = () => {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
 
@@ -113,3 +113,5 @@ export const Notifications: React.FC = () => {
     </React.Fragment>
   );
 };
+
+export default Notifications;

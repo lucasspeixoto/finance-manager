@@ -4,8 +4,8 @@ import { useSidebar } from 'core/hooks/useSidebar';
 import React, { useEffect, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 
-import { Logo } from '../../../elements/Logo';
-import { SidebarMenu } from './SidebarMenu';
+import Logo from '../../../elements/Logo';
+import SidebarMenu from './SidebarMenu';
 import { appMenuItems, MenuItems } from './SidebarMenu/items';
 
 const SidebarWrapper = styled(Box)(
@@ -35,7 +35,7 @@ const TopSection = styled(Box)(
 `,
 );
 
-export const Sidebar: React.FC = () => {
+const Sidebar: React.FC = () => {
   const { sidebarToggle, toggleSidebar } = useSidebar();
   const closeSidebar = () => toggleSidebar();
   const [menuItems, setMenuItems] = useState<MenuItems[]>(appMenuItems);
@@ -77,3 +77,5 @@ export const Sidebar: React.FC = () => {
     </React.Fragment>
   );
 };
+
+export default Sidebar;

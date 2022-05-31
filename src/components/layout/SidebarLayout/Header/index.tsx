@@ -8,8 +8,8 @@ import React from 'react';
 import { useSidebar } from '../../../../core/hooks/useSidebar';
 import { useTheme } from '../../../../core/hooks/useTheme';
 import Switch from '../../../elements/Switch';
-import { Notifications } from './Notifications';
-import { HeaderUserbox } from './UserBox';
+import Notifications from './Notifications';
+import HeaderUserbox from './UserBox';
 
 const HeaderWrapper = styled(Box)(
   ({ theme }) => `
@@ -30,7 +30,7 @@ const HeaderWrapper = styled(Box)(
 `,
 );
 
-export const Header: React.FC = () => {
+const Header: React.FC = () => {
   const { sidebarToggle, toggleSidebar } = useSidebar();
 
   const { theme, changeTheme } = useTheme();
@@ -62,3 +62,5 @@ export const Header: React.FC = () => {
     </HeaderWrapper>
   );
 };
+
+export default Header;

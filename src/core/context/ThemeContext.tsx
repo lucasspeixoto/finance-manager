@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@mui/material';
+import { ThemeProvider as MaterialThemeProvider } from '@mui/material';
 import { useLocalStorage } from 'core/hooks/useLocalStorage';
 import React, { createContext, useState } from 'react';
 
@@ -12,9 +12,7 @@ interface IThemeContext {
 
 export const ThemeContext = createContext<IThemeContext>({} as IThemeContext);
 
-export const ThemeProviderWrapper: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [selectedTheme, setSelectedTheme] = useLocalStorage<string>(
     '@meu-financeiro: theme',
     'dark',
@@ -32,9 +30,9 @@ export const ThemeProviderWrapper: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <ThemeContext.Provider value={{ theme, changeTheme }}>
-      <ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
+      <MaterialThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
         {children}
-      </ThemeProvider>
+      </MaterialThemeProvider>
     </ThemeContext.Provider>
   );
 };

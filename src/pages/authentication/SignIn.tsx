@@ -26,7 +26,7 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 
-import LoginBackground from './../assets/portrait-background.jpg';
+import LoginBackground from '../../assets/portrait-background.jpg';
 
 interface SigninForm {
   email: string;
@@ -157,7 +157,12 @@ const SignIn: React.FC = () => {
                   </Form>
                 )}
               </Formik>
-              <Grid container justifyContent="space-between">
+              <Grid
+                container
+                justifyContent={{ xs: 'center', sm: 'space-between' }}
+                columnSpacing={3}
+                rowSpacing={1}
+              >
                 <Grid item>
                   <Link color="primary" to="/forgot-password">
                     Esqueceu a senha ?

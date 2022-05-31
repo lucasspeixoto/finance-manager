@@ -13,7 +13,7 @@ const Copyright: React.FC<CopyrightProps> = ({ text, redirectUrl }) => {
     <Grid item justifyContent="flex-end">
       <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 3 }}>
         {'Copyright © '}
-        <Link color="inherit" target="_blank" href={redirectUrl}>
+        <Link variant="inherit" target="_blank" href={redirectUrl}>
           {text}
         </Link>{' '}
         {new Date().getFullYear()}

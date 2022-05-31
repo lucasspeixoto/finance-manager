@@ -2,9 +2,9 @@
 import Loading from 'components/elements/Loading';
 import BaseLayout from 'components/layout/BaseLayout';
 import SidebarLayout from 'components/layout/SidebarLayout';
-import ForgotPassword from 'pages/ForgotPassword';
-import SignIn from 'pages/SignIn';
-import SignUp from 'pages/SignUp';
+import ForgotPassword from 'pages/authentication/ForgotPassword';
+import SignIn from 'pages/authentication/SignIn';
+import SignUp from 'pages/authentication/SignUp';
 import React, { ComponentType, lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
@@ -24,8 +24,10 @@ const Loader = (Component: ComponentType) => (props: JSX.IntrinsicAttributes) =>
     </Suspense>
   );
 
-const Dashboard = Loader(lazy(() => import('../../../pages/Dashboard')));
-const FinanceProfile = Loader(lazy(() => import('../../../pages/FinanceProfile')));
+const Dashboard = Loader(lazy(() => import('../../../pages/dashboards/Dashboard')));
+const FinanceProfile = Loader(
+  lazy(() => import('../../../pages/profile/FinanceProfile')),
+);
 
 export const AppRoutes: React.FC = () => {
   return (

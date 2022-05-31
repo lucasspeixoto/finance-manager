@@ -20,6 +20,8 @@ import { useSnackBar } from 'core/hooks/useSnackbar';
 import { useTheme } from 'core/hooks/useTheme';
 import { useToggle } from 'core/hooks/useToggle';
 import { auth } from 'core/services/firebase';
+import { userActions } from 'core/store/auth-slice';
+import { useAppDispatch } from 'core/store/hooks';
 import { IUser } from 'core/types/firebase-user';
 import {
   createUserWithEmailAndPassword,
@@ -32,10 +34,8 @@ import { TextField } from 'formik-mui';
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
-import { userActions } from 'store/auth-slice';
-import { useAppDispatch } from 'store/hooks';
 
-import LoginBackground from './../assets/landscape-background.jpg';
+import LoginBackground from '../../assets/landscape-background.jpg';
 
 interface SignupForm {
   name: string;

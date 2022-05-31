@@ -18,11 +18,11 @@ import {
 import { styled } from '@mui/material/styles';
 import { useSnackBar } from 'core/hooks/useSnackbar';
 import { auth } from 'core/services/firebase';
+import { userActions } from 'core/store/auth-slice';
+import { useAppDispatch, useAppSelector } from 'core/store/hooks';
 import { signOut } from 'firebase/auth';
 import React, { useRef, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { userActions } from 'store/auth-slice';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -59,7 +59,7 @@ const UserBoxDescription = styled(Typography)(
 `,
 );
 
-export const HeaderUserbox: React.FC = () => {
+const HeaderUserbox: React.FC = () => {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -156,3 +156,5 @@ export const HeaderUserbox: React.FC = () => {
     </React.Fragment>
   );
 };
+
+export default HeaderUserbox;
