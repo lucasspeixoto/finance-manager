@@ -8,14 +8,11 @@ import {
   Button,
   Divider,
   Hidden,
-  lighten,
   List,
   ListItem,
   ListItemText,
   Popover,
-  Typography,
 } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { useSnackBar } from 'core/hooks/useSnackbar';
 import { auth } from 'core/services/firebase';
 import { userActions } from 'core/store/auth-slice';
@@ -24,40 +21,13 @@ import { signOut } from 'firebase/auth';
 import React, { useRef, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
-const UserBoxButton = styled(Button)(
-  ({ theme }) => `
-        padding-left: ${theme.spacing(1)};
-        padding-right: ${theme.spacing(1)};
-`,
-);
-
-const MenuUserBox = styled(Box)(
-  ({ theme }) => `
-        background: ${theme.colors.alpha.black[5]};
-        padding: ${theme.spacing(2)};
-`,
-);
-
-const UserBoxText = styled(Box)(
-  ({ theme }) => `
-        text-align: left;
-        padding-left: ${theme.spacing(1)};
-`,
-);
-
-const UserBoxLabel = styled(Typography)(
-  ({ theme }) => `
-        font-weight: ${theme.typography.fontWeightBold};
-        color: ${theme.palette.secondary.main};
-        display: block;
-`,
-);
-
-const UserBoxDescription = styled(Typography)(
-  ({ theme }) => `
-        color: ${lighten(theme.palette.secondary.main, 0.5)}
-`,
-);
+import {
+  MenuUserBox,
+  UserBoxButton,
+  UserBoxDescription,
+  UserBoxLabel,
+  UserBoxText,
+} from './styled';
 
 const HeaderUserbox: React.FC = () => {
   const ref = useRef<any>(null);

@@ -1,39 +1,12 @@
-import { Box, Drawer, Hidden } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Drawer, Hidden } from '@mui/material';
+import Logo from 'components/widgets/Logo';
 import { useSidebar } from 'core/hooks/useSidebar';
 import React, { useEffect, useState } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 
-import Logo from '../../../elements/Logo';
 import SidebarMenu from './SidebarMenu';
 import { appMenuItems, MenuItems } from './SidebarMenu/items';
-
-const SidebarWrapper = styled(Box)(
-  ({ theme }) => `
-    width: ${theme.sidebar.width};
-    color: ${theme.sidebar.textColor};
-    background: ${theme.sidebar.background};
-    box-shadow: ${theme.sidebar.boxShadow};
-    height: 100%;
-    
-    @media (min-width: ${theme.breakpoints.values.lg}px) {
-        position: fixed;
-        z-index: 10;
-        border-top-right-radius: ${theme.general.borderRadius};
-        border-bottom-right-radius: ${theme.general.borderRadius};
-    }
-`,
-);
-
-const TopSection = styled(Box)(
-  ({ theme }) => `
-    display: flex;
-    height: 88px;
-    align-items: center;
-    margin: 0 ${theme.spacing(2)} ${theme.spacing(2)};
-    border-bottom: ${theme.sidebar.dividerBg} solid 1px;
-`,
-);
+import { SidebarWrapper, TopSection } from './styled';
 
 const Sidebar: React.FC = () => {
   const { sidebarToggle, toggleSidebar } = useSidebar();

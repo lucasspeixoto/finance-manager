@@ -1,7 +1,8 @@
 /* eslint-disable no-undef */
-import Loading from 'components/elements/Loading';
+
 import BaseLayout from 'components/layout/BaseLayout';
 import SidebarLayout from 'components/layout/SidebarLayout';
+import Loading from 'components/widgets/Loading';
 import ForgotPassword from 'pages/authentication/ForgotPassword';
 import SignIn from 'pages/authentication/SignIn';
 import SignUp from 'pages/authentication/SignUp';

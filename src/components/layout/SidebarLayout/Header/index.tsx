@@ -2,12 +2,12 @@ import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
 import { Box, Hidden, IconButton, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import AppSwitch from 'components/widgets/AppSwitch';
 import { useToggle } from 'core/hooks/useToggle';
 import React from 'react';
 
 import { useSidebar } from '../../../../core/hooks/useSidebar';
 import { useTheme } from '../../../../core/hooks/useTheme';
-import Switch from '../../../elements/Switch';
 import Notifications from './Notifications';
 import HeaderUserbox from './UserBox';
 
@@ -46,7 +46,7 @@ const Header: React.FC = () => {
   return (
     <HeaderWrapper display="flex" alignItems="center">
       <Box display="flex" alignItems="center">
-        <Switch checked={checked} onChange={handleChangeTheme} />
+        <AppSwitch checked={checked} onChange={handleChangeTheme} />
       </Box>
       <Box display="flex" alignItems="center">
         <Notifications />

@@ -7,7 +7,7 @@ type LoginButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   label: string;
   icon: ReactNode;
   disabled: boolean;
-  authProcessHandler?: () => void;
+  handleProcess?: () => void;
 };
 
 const StyledButton = styled(Button)(
@@ -27,7 +27,7 @@ const AppButton: React.FC<LoginButtonProps> = ({
   label,
   icon,
   disabled,
-  authProcessHandler,
+  handleProcess,
 }) => {
   return (
     <StyledButton
@@ -37,7 +37,7 @@ const AppButton: React.FC<LoginButtonProps> = ({
       variant="contained"
       endIcon={icon}
       sx={{ mt: 2, mb: 2 }}
-      onClick={authProcessHandler}
+      onClick={handleProcess}
     >
       {label}
     </StyledButton>

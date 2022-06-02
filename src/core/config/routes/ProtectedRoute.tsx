@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
-import Loading from 'components/elements/Loading';
+
 import BaseLayout from 'components/layout/BaseLayout';
+import Loading from 'components/widgets/Loading';
 import { useAppSelector } from 'core/store/hooks';
 import React from 'react';
 import { Navigate } from 'react-router-dom';

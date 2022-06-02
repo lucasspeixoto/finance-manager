@@ -6,13 +6,11 @@ import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import { IconButton, InputAdornment } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Container, { ContainerProps } from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import LinearProgress from '@mui/material/LinearProgress';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import AppButton from 'components/elements/AppButton';
-import Switch from 'components/elements/Switch';
+import AppSwitch from 'components/widgets/AppSwitch';
 import Copyright from 'components/widgets/Copyright';
 import { Error } from 'core/helpers/error-messages';
 import { signupSchema } from 'core/helpers/schemas/signup-schema';
@@ -35,7 +33,7 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 
-import LoginBackground from '../../assets/landscape-background.jpg';
+import { BackgroundContainer, SignupContainer } from './styled';
 
 interface SignupForm {
   name: string;
@@ -48,26 +46,6 @@ const initialValues: SignupForm = {
   email: '',
   password: '',
 };
-
-const BackgroundContainer = styled(Container)<ContainerProps>(() => ({
-  backgroundImage: `url(${LoginBackground})`, //url(https://source.unsplash.com/random)',
-  backgroundRepeat: 'no-repeat',
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  minHeight: '100vh',
-  minWidth: '100vw',
-}));
-
-const SignupContainer = styled(Container)<ContainerProps>(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: theme.spacing(2, 1),
-  backgroundColor: theme.palette.background.paper,
-  borderRadius: theme.general.borderRadiusLg,
-  boxShadow: theme.sidebar.boxShadow,
-}));
 
 const SignUp: React.FC = () => {
   //* Estados
@@ -144,7 +122,7 @@ const SignUp: React.FC = () => {
         <title>Cadastro</title>
       </Helmet>
       <Grid container justifyContent="flex-end">
-        <Switch checked={checked} onChange={handleChangeTheme} />
+        <AppSwitch checked={checked} onChange={handleChangeTheme} />
       </Grid>
       <SignupContainer maxWidth="xs">
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>

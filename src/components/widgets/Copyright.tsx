@@ -3,12 +3,10 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 
-interface CopyrightProps {
+const Copyright: React.FC<{
   text: string;
   redirectUrl: string;
-}
-
-const Copyright: React.FC<CopyrightProps> = ({ text, redirectUrl }) => {
+}> = ({ text, redirectUrl }) => {
   return (
     <Grid item justifyContent="flex-end">
       <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 3 }}>

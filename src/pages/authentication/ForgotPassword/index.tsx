@@ -4,13 +4,11 @@ import LockOpenSharpIcon from '@mui/icons-material/LockOpenSharp';
 import LockResetSharpIcon from '@mui/icons-material/LockResetSharp';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Container, { ContainerProps } from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import LinearProgress from '@mui/material/LinearProgress';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import AppButton from 'components/elements/AppButton';
-import Switch from 'components/elements/Switch';
+import AppSwitch from 'components/widgets/AppSwitch';
 import Copyright from 'components/widgets/Copyright';
 import { Error } from 'core/helpers/error-messages';
 import { forgotPasswordSchema } from 'core/helpers/schemas/forgot-schema';
@@ -25,7 +23,7 @@ import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
 
-import LoginBackground from '../../assets/landscape2-background.jpg';
+import { BackgroundContainer, ForgotPasswordContainer } from './styled';
 
 interface ForgotPasswordForm {
   email: string;
@@ -34,27 +32,6 @@ interface ForgotPasswordForm {
 const initialValues: ForgotPasswordForm = {
   email: '',
 };
-
-const BackgroundContainer = styled(Container)<ContainerProps>(() => ({
-  backgroundImage: `url(${LoginBackground})`, //url(https://source.unsplash.com/random)',
-  backgroundRepeat: 'no-repeat',
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  minHeight: '100vh',
-  minWidth: '100vw',
-}));
-
-const SignupContainer = styled(Container)<ContainerProps>(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  marginTop: '20vh',
-  padding: theme.spacing(2, 1),
-  backgroundColor: theme.palette.background.paper,
-  borderRadius: theme.general.borderRadiusLg,
-  boxShadow: theme.sidebar.boxShadow,
-}));
 
 const ForgotPassword: React.FC = () => {
   //* Estados
@@ -103,9 +80,9 @@ const ForgotPassword: React.FC = () => {
         <title>Recuperação de Senha</title>
       </Helmet>
       <Grid container justifyContent="flex-end">
-        <Switch checked={checked} onChange={handleChangeTheme} />
+        <AppSwitch checked={checked} onChange={handleChangeTheme} />
       </Grid>
-      <SignupContainer maxWidth="xs">
+      <ForgotPasswordContainer maxWidth="xs">
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <LockOpenSharpIcon />
         </Avatar>
@@ -153,7 +130,7 @@ const ForgotPassword: React.FC = () => {
           text="Meu Financeiro"
           redirectUrl="https://lucasspeixoto.github.io/profile"
         />
-      </SignupContainer>
+      </ForgotPasswordContainer>
     </BackgroundContainer>
   );
 };
