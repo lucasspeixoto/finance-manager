@@ -17,16 +17,15 @@ import { signupSchema } from 'core/helpers/schemas/signup-schema';
 import { useSnackBar } from 'core/hooks/useSnackbar';
 import { useTheme } from 'core/hooks/useTheme';
 import { useToggle } from 'core/hooks/useToggle';
-import { auth } from 'core/services/firebase';
+import { auth, db } from 'core/services/firebase';
 import { userActions } from 'core/store/auth-slice';
 import { useAppDispatch } from 'core/store/hooks';
-import { IUser } from 'core/types/firebase-user';
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   updateProfile,
-  UserCredential,
 } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { TextField } from 'formik-mui';
 import React, { useState } from 'react';
@@ -65,44 +64,7 @@ const SignUp: React.FC = () => {
   };
   const dispatch = useAppDispatch();
 
-  const updateUserDisplayName = async (name: string) => {
-    await updateProfile(auth.currentUser!, {
-      displayName: name,
-    })
-      .then(() => {
-        const currentUser = auth.currentUser;
-        if (currentUser) {
-          const newUser: IUser = {
-            uid: currentUser.uid,
-            displayName: name,
-            email: currentUser.email,
-            photoUrl: currentUser.photoURL,
-          };
-          dispatch(userActions.saveUser(newUser));
-        }
-      })
-      .catch((error) => {
-        const errorMessage = Error[error.code];
-        showSnackBar(errorMessage, 'error');
-      });
-  };
-
-  // eslint-disable-next-line no-unused-vars
-  const handleSubmit = async (values: SignupForm, actions: FormikHelpers<SignupForm>) => {
-    setIsLoadingButton(true);
-
-    const { name, email, password } = values;
-
-    await createUserWithEmailAndPassword(auth, email, password)
-      // eslint-disable-next-line no-unused-vars
-      .then((userCredential: UserCredential) => {
-        updateUserDisplayName(name);
-      })
-      .catch((error) => {
-        const errorMessage = Error[error.code];
-        showSnackBar(errorMessage, 'error');
-      });
-
+  const handleSendEmailVerification = async () => {
     await sendEmailVerification(auth.currentUser!)
       .then(() => {
         showSnackBar('Email de confirmação enviado!', 'info');
@@ -111,9 +73,53 @@ const SignUp: React.FC = () => {
         const errorMessage = Error[error.code];
         showSnackBar(errorMessage, 'error');
       });
+  };
+  const handleInsertUserIntoDatabase = async () => {
+    const { uid, displayName, email, photoURL } = auth!.currentUser!;
+    const newUser = {
+      uid: uid,
+      displayName: displayName,
+      email: email,
+      photoURL: photoURL,
+    };
+    dispatch(userActions.saveUser(newUser));
+    await setDoc(doc(db, 'users', `${newUser.uid}`), newUser);
+  };
 
-    navigate('/dashboard');
-    setIsLoadingButton(false);
+  const handleUpdateUserDisplayName = async (displayName: string) => {
+    await updateProfile(auth.currentUser!, { displayName })
+      .then(() => {
+        handleInsertUserIntoDatabase();
+      })
+      .catch((error) => {
+        const errorMessage = Error[error.code];
+        showSnackBar(errorMessage, 'error');
+      });
+  };
+
+  const handleCreateUserWithEmailAndPassword = async (
+    values: SignupForm,
+    // eslint-disable-next-line no-unused-vars
+    actions: FormikHelpers<SignupForm>,
+  ) => {
+    setIsLoadingButton(true);
+
+    const { name, email, password } = values;
+
+    await createUserWithEmailAndPassword(auth, email, password)
+      // userCredential: UserCredential
+      .then(() => {
+        handleUpdateUserDisplayName(name);
+      })
+      .catch((error) => {
+        const errorMessage = Error[error.code];
+        showSnackBar(errorMessage, 'error');
+      })
+      .finally(() => {
+        handleSendEmailVerification();
+        navigate('/dashboard');
+        setIsLoadingButton(false);
+      });
   };
 
   return (
@@ -135,7 +141,7 @@ const SignUp: React.FC = () => {
           <Formik
             initialValues={initialValues}
             validationSchema={signupSchema}
-            onSubmit={handleSubmit}
+            onSubmit={handleCreateUserWithEmailAndPassword}
           >
             {({ submitForm, isValid, dirty }) => (
               <Form>

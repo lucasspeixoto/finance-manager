@@ -12,12 +12,13 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log(user);
       if (user) {
         const newUser: IUser = {
           uid: user.uid,
           displayName: user.displayName!,
           email: user.email!,
-          photoUrl: user.photoURL,
+          photoURL: user.photoURL,
         };
         dispatch(userActions.saveUser(newUser));
       } else {

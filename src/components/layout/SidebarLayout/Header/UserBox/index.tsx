@@ -40,31 +40,23 @@ const HeaderUserbox: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const handleLogout = async () => {
-    try {
-      await signOut(auth)
-        .then(() => {
-          navigate('/');
-          dispatch(userActions.removeUser());
-          showSnackBar('Você foi deslogado', 'info');
-        })
-        // eslint-disable-next-line no-unused-vars
-        .catch((error) => {
-          showSnackBar(`Error ao deslogar, tente novamente`, 'error');
-        });
-      // eslint-disable-next-line no-unused-vars
-    } catch (error) {
-      showSnackBar(`Error ao deslogar, tente novamente`, 'error');
-    }
+    await signOut(auth)
+      .then(() => {
+        dispatch(userActions.removeUser());
+      })
+      .catch(() => {
+        showSnackBar(`Error ao deslogar, tente novamente`, 'error');
+      })
+      .finally(() => {
+        navigate('/');
+        showSnackBar('Até Logo 😊', 'info');
+      });
   };
 
   return (
     <React.Fragment>
       <UserBoxButton color="secondary" ref={ref} onClick={() => setOpen(true)}>
-        <Avatar
-          variant="rounded"
-          alt={'Nome'}
-          src="https://lh3.googleusercontent.com/a-/AOh14Gj37hwEKTk89_dqJj5ysJeo3PeQtRsf9t3FPyjdRQ=s96-c"
-        />
+        <Avatar variant="rounded" alt={'Nome'} src={user!.photoURL!} />
         <Hidden mdDown>
           {user ? (
             <UserBoxText>
