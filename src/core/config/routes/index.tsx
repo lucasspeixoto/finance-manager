@@ -26,9 +26,7 @@ const Loader = (Component: ComponentType) => (props: JSX.IntrinsicAttributes) =>
   );
 
 const Dashboard = Loader(lazy(() => import('../../../pages/dashboards/Dashboard')));
-const FinanceProfile = Loader(
-  lazy(() => import('../../../pages/profile/FinanceProfile')),
-);
+const FinanceProfile = Loader(lazy(() => import('../../../pages/Profile')));
 
 export const AppRoutes: React.FC = () => {
   return (

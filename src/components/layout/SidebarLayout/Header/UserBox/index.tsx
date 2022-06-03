@@ -82,20 +82,15 @@ const HeaderUserbox: React.FC = () => {
           horizontal: 'right',
         }}
       >
-        <MenuUserBox sx={{ minWidth: 210 }} display="flex">
-          <Avatar
-            variant="rounded"
-            alt={'Nome'}
-            src="https://lh3.googleusercontent.com/a-/AOh14Gj37hwEKTk89_dqJj5ysJeo3PeQtRsf9t3FPyjdRQ=s96-c"
-          />
-
-          {user ? (
+        {user ? (
+          <MenuUserBox sx={{ minWidth: 210 }} display="flex">
+            <Avatar variant="rounded" alt={'Nome'} src={user.photoURL!} />
             <UserBoxText>
               <UserBoxLabel variant="body1">{user.displayName}</UserBoxLabel>
               <UserBoxDescription variant="body2">{user.email}</UserBoxDescription>
             </UserBoxText>
-          ) : null}
-        </MenuUserBox>
+          </MenuUserBox>
+        ) : null}
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
           <ListItem button to="/profile" component={NavLink}>
